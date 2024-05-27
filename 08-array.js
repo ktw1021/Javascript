@@ -48,3 +48,4 @@ console.log(ingr, ingr.length);
 
 // join: 배열 내부의 요소(아이템)를 한 문장으로 합침
 console.log(ingr,"-> 김장재료:",ingr.join(", "));
+

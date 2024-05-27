@@ -30,4 +30,5 @@ console.log(true && "Test"); //Test
 console.log(false && "Test"); //false
 
 console.log(true || "Test"); // true
-console.log(false || "Test");
+console.log(false || "Test"); // Test
+
