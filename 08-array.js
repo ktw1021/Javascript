@@ -129,6 +129,3 @@ fruits.sort((v1,v2) => {
     return v2.length - v1.length;
 });
 console.log("문자열 길이로 소팅:", fruits);
-
-let now = new Date();
-console.log(now);
