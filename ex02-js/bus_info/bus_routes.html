@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Route Information</title>
+</head>
+<body>
+    <h1>Bus Route Information</h1>
+    <div id="route-info"></div>
+
+    <script>
+        async function fetchBusRouteInfo() {
+            const url = 'https://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteNoList';
+            const queryParams = '?' + new URLSearchParams({
+                serviceKey: 'aFaYNwN4cILVTvYDfYL3Cq37TtGoDHXLhbbk2qfEwXuVVhMMUtTdaJCoFAP/0/22YRvXvWs9OKOQB036Tj31Rg==',
+                _type: 'xml',
+                cityCode: '25',
+                routeNo: '5'
+            });
+
+            try {
+                const response = await fetch(url + queryParams);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+
+                const items = xmlDoc.getElementsByTagName("item");
+
+                const routes = Array.from(items).map(item => ({
+                    routeId: item.getElementsByTagName("routeid")[0].textContent,
+                    routeNo: item.getElementsByTagName("routeno")[0].textContent,
+                    routeType: item.getElementsByTagName("routetp")[0].textContent,
+                    startNodeName: item.getElementsByTagName("startnodenm")[0].textContent,
+                    startVehicleTime: item.getElementsByTagName("startvehicletime")[0].textContent,
+                    endNodeName: item.getElementsByTagName("endnodenm")[0].textContent,
+                    endVehicleTime: item.getElementsByTagName("endvehicletime")[0].textContent
+                }));
+
+                displayRoutes(routes);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayRoutes(routes) {
+            const routeInfoDiv = document.getElementById('route-info');
+            routes.forEach(route => {
+                const routeDiv = document.createElement('div');
+                routeDiv.innerHTML = `
+                    <h3>Route No: ${route.routeNo}</h3>
+                    <p>Route ID: ${route.routeId}</p>
+                    <p>Route Type: ${route.routeType}</p>
+                    <p>Start Node: ${route.startNodeName} (Start Time: ${route.startVehicleTime})</p>
+                    <p>End Node: ${route.endNodeName} (End Time: ${route.endVehicleTime})</p>
+                `;
+                routeInfoDiv.appendChild(routeDiv);
+            });
+        }
+
+        fetchBusRouteInfo();
+
+        // API 키와 버스 노선 정보 조회를 위한 요청 매개변수
+const apiKey = 'aFaYNwN4cILVTvYDfYL3Cq37TtGoDHXLhbbk2qfEwXuVVhMMUtTdaJCoFAP/0/22YRvXvWs9OKOQB036Tj31Rg=='; // 여기에 국가 데이터 포털에서 발급받은 API 키를 넣어주세요
+const routeId = 'routeId'; // 여기에 조회하려는 버스 노선 ID를 넣어주세요
+
+// API 엔드포인트 URL
+const apiUrl = 'http://apis.data.go.kr/1613000/BusRouteInfoInqireService/getRouteInfoIem';
+
+// API 호출
+axios.get(apiUrl, {
+    params: {
+        ServiceKey: apiKey,
+        busRouteId: routeId
+    }
+})
+.then(response => {
+    // 성공 시 처리
+    console.log('받은 데이터:', response.data);
+})
+.catch(error => {
+    // 에러 처리
+    console.error('요청 중 오류 발생:', error);
+});
+
+    </script>
+</body>
+</html>

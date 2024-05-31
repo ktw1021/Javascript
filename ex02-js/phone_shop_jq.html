@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>iPhones</title>
+
+    <!-- jQuery 라이브러리: CDN 연결 -->
+    <!--script src="https://code.jquery.com/jquery-3.7.1.js" 
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" 
+    crossorigin="anonymous">-->
+
+    <!-- jQuery 라이브러리: 내부 파일 제공 -->
+    <script src = "script/jquery-3.7.1.js">
+</script>
+
+<script>
+// 페이지 초기화
+//  window.addEventListner("load",callback);
+$(document).ready(event => {
+    // console.log(document);
+    // console.log($(document));   // jQuery Wrapper
+    function testAttribute() {
+    // #main-image 요소 선택
+    let mainImage = $("#main-image");
+    console.log(mainImage);
+    
+    // 속성 목록 확인: getAttributeNames
+    // jQuery 포장 Unwrapping
+    console.log(mainImage[0].getAttributeNames());
+
+    // title 속성 조회
+    console.log("title:", mainImage.attr("title"));
+    // title 속성 변경
+    mainImage.attr("title", `제품: ${mainImage.attr("title")}`);
+    
+    // 아래쪽의 Products들의 title 속성도 변경
+    let subs = $(".sub-image");
+    console.log(subs);
+
+    for (let i = 0; i<subs.length; i++) {
+        $(subs[i])
+        .attr("title", "제품: " + 
+        $(subs[i]).attr("title"));
+    }
+    }
+    // testAttribute();
+    
+    // jQuery Event
+    // /#main-image에 click 이벤트 처리기 연결
+    // 메서드를 이용한 이벤트 연결
+    $("#main-image").click(function (event) {
+        // console.log(event);
+        // JavaScript 함수의 this는 해당 함수를 호출한 객체를 의미
+        // let mainImage = this; // jQuery 이벤트 핸들러의 this == event.target
+        let mainImage = event.target;
+        console.log(mainImage);
+
+        alert("메인 이미지 클릭");
+    })
+    
+    let products = $(".sub-image");
+    console.log(products);
+
+    // 집합 객체도 루프를 돌리지 않고, 이벤트를 연결하면 하위 요소들에
+    // 공통적으로 연결
+    // 가장 추천하는 이벤트 연결 방법: on
+    products.on("click", event => {
+        let obj = event.target; // 이벤트 발생 객체
+        // 클릭한 객체 (event.target)의 title과 src 속성을 
+        // #main-image로 복사
+        $("#main-image").attr({
+            src: obj.attr("src"), 
+            title: obj.attr("title")
+        })
+
+        $("#product-info > h2").text(obj.attr("title"));
+    })
+});
+    
+</script>
+
+    <style>
+        #product-info img.selected {
+            width: 225px;
+            height: 265px;
+            float: left;
+            border: 1px solid lightslategrey;
+            margin: 5px;
+        }
+
+        #product-list li {
+            list-style-type: none;
+            border: 1px solid lightslategrey;
+            margin: 5px;
+            float: left;
+        }
+
+        #product-list li img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+    <!-- <script src = "script/event.js">
+    </script> -->
+</head>
+
+<body>
+    <div id="product-info">
+        <img id="main-image" src="images/iphone-xs.jpeg" class="selected" title="iPhones XS">
+        <h2>iPhone Xs</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum.</p>
+        <h3>Products</h3>
+        <ul id="product-list">
+            <li><img class="sub-image" src="images/iphone-xs.jpeg" title="iPhone XS"></li>
+            <li><img class="sub-image" src="images/iphone-xr.jpeg" title="iPhone XR"></li>
+            <li><img class="sub-image" src="images/iphone8.jpeg" title="iPhone 8"></li>
+            <li><img class="sub-image" src="images/ipad-mini.jpeg" title="iPad Mini" 
+                
+                ondblclick="alert('구매페이지 ㄱ?')"></li>
+
+        </ul>
+        <input type="text" id="keyword" /><button id="btn-search">검색</button>
+    </div>
+
+    <!-- <script src = "script/attribute.js">
+    </script> -->
+
+</body>
+
+</html>

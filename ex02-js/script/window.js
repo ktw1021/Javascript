@@ -21,6 +21,6 @@ function closeWindow() {
 
 function printInner() {
     let message = `현재 윈도우 창의 크기는 ${window.innerWidth}`
-    + `* ${window.innerHeight}`;
+    + ` * ${window.innerHeight}`;
     alert(message);
 }
